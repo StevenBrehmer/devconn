@@ -25,12 +25,6 @@ router.post("/register", (req, res) => {
         d: "mm" //default
       });
 
-      //Testing
-      console.log("name: " + req.body.name);
-      console.log("email: " + req.body.email);
-      console.log("Avatar: " + avatar);
-      console.log("Password: " + req.body.password);
-
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
