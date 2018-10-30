@@ -33,8 +33,8 @@ router.post("/register", (req, res) => {
       }); // mongoose new then model name
       //es6 will let you just type avatar, since they are the same... but i will ignore that.
 
-      bcrypt.genSalt(10, (_err, salt) => {
-        bcrypt.hash(newUser.password, salt, (_err, hash) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
           //if (err) throw err;
           newUser.password = hash;
           newUser
