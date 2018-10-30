@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../../config/keys");
 
 // Bring user model
 const User = require("../../models/User");
@@ -67,7 +69,26 @@ router.post("/login", (req, res) => {
     } else {
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
-          res.json({ msg: "Success" });
+          // User email & Password matched
+
+          // Signing the Token
+          // Takes in two things
+          //  1.) Payload: what we want to includein the token - User info
+          //  2.) Secret or Key: & expiration if we want it to expire in a certain ammoutn of time
+
+          const payload = { id: user.id, name: user.name, avatar: user.avatar }; // create JWT payload
+          // ()=> is a call back function... cause i know i will forget
+          jwt.sign(
+            payload,
+            keys.secretOrKey,
+            { expiresIn: 3600 },
+            (err, token) => {
+              res.json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          ); // about an hour
         } else {
           return res.status(404).json({ password: "Password Incorrect" });
         }
