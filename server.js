@@ -22,7 +22,7 @@ mongoose
     db,
     { useNewUrlParser: true } //Needed to add because current url parser was depreciated...
   )
-  .then(() => console.log("MongoDB Live & clConnected"))
+  .then(() => console.log("MongoDB Live & Connected"))
   .catch(err => console.log(err));
 
 // Dont need this any more :(
@@ -31,6 +31,8 @@ mongoose
 // Passport Middleware
 app.use(passport.initialize());
 
+// Everythign else we do in passport should be in a config file
+// can have a local strategy, or google strategy, or jwt strategy
 // Everythign else we do in passport should be in a config file
 // can have a local strategy, or google strategy, or jwt strategy
 require("./config/passport")(passport);

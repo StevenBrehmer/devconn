@@ -12,7 +12,16 @@ opts.secretOrKey = keys.secretOrKey;
 module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      console.log(jwt_payload);
+      // want to get user that is being sent in token now
+      // find by id is a mongoose method
+      User.findById(jwt_payload.id)
+        .then(user => {
+          if (user) {
+            return done(null, user);
+          }
+          return done(null, false);
+        })
+        .catch(err => console.log(err));
     })
   );
 };
