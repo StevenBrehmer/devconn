@@ -47,5 +47,34 @@ router.post("/register", (req, res) => {
   });
 });
 
+// @route   get api/users/login
+// @desc    log in user/ Returning JWT or jason web token
+// @access  Public
+
+router.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  //Find the user by email.
+  //Reference the Find one function for mongoose model.
+  //First email is from the User model, the second is the variable declared above
+  //es6 shortcut, instad of calling email: email... just say email,
+  User.findOne({ email }).then(user => {
+    //Check for user
+    if (!user) {
+      console.log("noUser");
+      return res.status(404).json({ email: "User not found" });
+    } else {
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          res.json({ msg: "Success" });
+        } else {
+          return res.status(404).json({ password: "Password Incorrect" });
+        }
+      });
+    }
+  });
+});
+
 //Have to export the router for the server.js file to pick it up.
 module.exports = router;
