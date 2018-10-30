@@ -4,6 +4,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport = require("passport");
 
 // Bring user model
 const User = require("../../models/User");
@@ -77,7 +78,7 @@ router.post("/login", (req, res) => {
           //  2.) Secret or Key: & expiration if we want it to expire in a certain ammoutn of time
 
           const payload = { id: user.id, name: user.name, avatar: user.avatar }; // create JWT payload
-          // ()=> is a call back function... cause i know i will forget
+
           jwt.sign(
             payload,
             keys.secretOrKey,
@@ -96,6 +97,17 @@ router.post("/login", (req, res) => {
     }
   });
 });
+
+// @route   get api/users/current
+// @desc    returns current user (Owner of the Token)
+// @access  Private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({ msg: "Success" });
+  }
+);
 
 //Have to export the router for the server.js file to pick it up.
 module.exports = router;
