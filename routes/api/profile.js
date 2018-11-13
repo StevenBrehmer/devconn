@@ -54,10 +54,13 @@ router.post(
     if (typeof req.body.skills !== "undefined") {
       profileFields.skills = req.body.skills.split(",");
     }
-    if (req.body.skills) profileFields.skills = req.body.skills;
+
     if (req.body.bio) profileFields.bio = req.body.bio;
     if (req.body.githubusername)
       profileFields.githubusername = req.body.githubusername;
+
+    //Experience
+    /*profileFields.experience = {};
     if (req.body.experience.title)
       profileFields.experience.title = req.body.experience.title;
     if (req.body.experience.company)
@@ -72,6 +75,44 @@ router.post(
       profileFields.experience.current = req.body.experience.current;
     if (req.body.experience.description)
       profileFields.experience.description = req.body.experience.description;
+      */
+
+    //Social
+    profileFields.social = {};
+    if (req.body.social.youtube)
+      profileFields.social.youtube = req.body.social.youtube;
+    if (req.body.social.twitter)
+      profileFields.social.twitter = req.body.social.twitter;
+    if (req.body.social.facebook)
+      profileFields.social.facebook = req.body.social.facebook;
+    if (req.body.social.linkdin)
+      profileFields.social.linkdin = req.body.social.linkdin;
+    if (req.body.social.instagram)
+      profileFields.social.instagram = req.body.social.instagram;
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      if (profile) {
+        // Update Profile
+        Profile.findOneAndUpdate(
+          { user: req.user.id },
+          { $set: profileFields },
+          { new: true }
+        ).then(profile => res.json(profile));
+      } else {
+        // Create Profile
+        // First check to see if the handle exists. Check if the profile exists in an SEO friendly way
+        Profile.findOne({ handle: profileFields.handle }).then(profile => {
+          if (profile) {
+            errors.handle = "Handle already exists";
+            // any validation errors should be throwing a 400 error
+            res.status(400).json(errors);
+          }
+
+          //Save Profile
+          new Profile(profileFields).save().then(profile => res.json(profile));
+        });
+      }
+    });
   }
 );
 
