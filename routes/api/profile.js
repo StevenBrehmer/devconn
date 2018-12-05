@@ -85,8 +85,8 @@ router.post(
       profileFields.social.twitter = req.body.social.twitter;
     if (req.body.social.facebook)
       profileFields.social.facebook = req.body.social.facebook;
-    if (req.body.social.linkdin)
-      profileFields.social.linkdin = req.body.social.linkdin;
+    if (req.body.social.linkedin)
+      profileFields.social.linkedin = req.body.social.linkedin;
     if (req.body.social.instagram)
       profileFields.social.instagram = req.body.social.instagram;
 

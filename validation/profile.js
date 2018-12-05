@@ -24,6 +24,37 @@ module.exports = function validateProfileInput(data) {
     errors.skills = "Skills is required";
   }
 
+  if (!isEmpty(data.website)) {
+    if (!Validator.isURL(data.website)) {
+      errors.website = "Not a valid URL";
+    }
+  }
+
+  if (!isEmpty(data.youtube)) {
+    if (!Validator.isURL(data.youtube)) {
+      errors.youtube = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.twitter)) {
+    if (!Validator.isURL(data.twitter)) {
+      errors.twitter = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.facebook)) {
+    if (!Validator.isURL(data.facebook)) {
+      errors.facebook = "Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.linhedin)) {
+    if (!Validator.isURL(data.linhedin)) {
+      errors.linhedin = "Website Not a valid URL";
+    }
+  }
+  if (!isEmpty(data.website)) {
+    if (!Validator.isURL(data.website)) {
+      errors.website = "Website Not a valid URL";
+    }
+  }
   /*if (!Validator.isEmail(data.email)) {
     errors.email = "Email is invalid";
   }
