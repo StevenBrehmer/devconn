@@ -25,6 +25,7 @@ router.get(
     const errors = {};
 
     Profile.findOne({ user: req.user.id })
+      .populate("user", ["name", "avatar"]) //want to populate user in the Profile model
       .then(profile => {
         //quick test to see if this is a profile
         if (!profile) {
