@@ -7,20 +7,20 @@ module.exports = function validateProfileInput(data) {
   let errors = {};
 
   // if the object does not exist give it a blank string
-  data.handle = !isEmpty(data.hanlde) ? data.hanlde : "";
+  data.handle = !isEmpty(data.handle) ? data.handle : "";
   data.status = !isEmpty(data.status) ? data.status : "";
   data.skills = !isEmpty(data.skills) ? data.skills : "";
 
   if (!Validator.isLength(data.handle, { min: 2, max: 40 })) {
     errors.handle = "Handle needs to be 2 and 40 characters.";
   }
-  if (!Validator.isEmpty(data.handle)) {
+  if (Validator.isEmpty(data.handle)) {
     errors.handle = "Profile handle is required";
   }
-  if (!Validator.isEmpty(data.status)) {
+  if (Validator.isEmpty(data.status)) {
     errors.status = "Status is required";
   }
-  if (!Validator.isEmpty(data.skills)) {
+  if (Validator.isEmpty(data.skills)) {
     errors.skills = "Skills is required";
   }
 
@@ -45,14 +45,14 @@ module.exports = function validateProfileInput(data) {
       errors.facebook = "Not a valid URL";
     }
   }
-  if (!isEmpty(data.linhedin)) {
-    if (!Validator.isURL(data.linhedin)) {
-      errors.linhedin = "Website Not a valid URL";
+  if (!isEmpty(data.linkedin)) {
+    if (!Validator.isURL(data.linkedin)) {
+      errors.linkedin = "Not a valid URL";
     }
   }
-  if (!isEmpty(data.website)) {
-    if (!Validator.isURL(data.website)) {
-      errors.website = "Website Not a valid URL";
+  if (!isEmpty(data.instagram)) {
+    if (!Validator.isURL(data.instagram)) {
+      errors.instagram = "Not a valid URL";
     }
   }
   /*if (!Validator.isEmail(data.email)) {
@@ -66,6 +66,9 @@ module.exports = function validateProfileInput(data) {
   if (Validator.isEmpty(data.password)) {
     errors.password = "Password field is required";
   }*/
+
+  //console.log(data);
+  //console.log(errors);
 
   // for ES6... errors: errors, -> errors
   return {

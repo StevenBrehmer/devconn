@@ -3,6 +3,9 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
+//Load Validator
+const validateProfileInput = require("../../validation/profile");
+
 // Bring Models in User & Profile
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
@@ -41,15 +44,23 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    // Check Validation of user profile data
+    if (!isValid) {
+      // Return any 400 errors
+      return res.status(400).json(errors);
+    }
+
     // gather all fields that come in
     const profileFields = {};
-
     profileFields.user = req.user.id;
     if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.company) profileFields.company = req.body.company;
     if (req.body.website) profileFields.website = req.body.website;
     if (req.body.location) profileFields.location = req.body.location;
     if (req.body.status) profileFields.status = req.body.status;
+
     // Split skills into array from CSV
     if (typeof req.body.skills !== "undefined") {
       profileFields.skills = req.body.skills.split(",");
@@ -78,17 +89,18 @@ router.post(
       */
 
     //Social
+    //console.log(profileFields);
     profileFields.social = {};
-    if (req.body.social.youtube)
-      profileFields.social.youtube = req.body.social.youtube;
-    if (req.body.social.twitter)
-      profileFields.social.twitter = req.body.social.twitter;
-    if (req.body.social.facebook)
-      profileFields.social.facebook = req.body.social.facebook;
-    if (req.body.social.linkedin)
-      profileFields.social.linkedin = req.body.social.linkedin;
-    if (req.body.social.instagram)
-      profileFields.social.instagram = req.body.social.instagram;
+    //console.log(req.body.social);
+
+    if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
+    if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
+    if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
+    if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
+    if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
+    //console.log(profileFields);
+
+    //console.log(req.body);
 
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
