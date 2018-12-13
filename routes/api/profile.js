@@ -7,7 +7,7 @@ const passport = require("passport");
 const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
 const validateEducationInput = require("../../validation/education");
-// Bring Models in User & Profile
+// Bring Models for User & Profile
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 
@@ -146,18 +146,13 @@ router.post(
       */
 
     //Social
-    //console.log(profileFields);
     profileFields.social = {};
-    //console.log(req.body.social);
 
     if (req.body.youtube) profileFields.social.youtube = req.body.youtube;
     if (req.body.twitter) profileFields.social.twitter = req.body.twitter;
     if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
-    //console.log(profileFields);
-
-    //console.log(req.body);
 
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
@@ -197,7 +192,6 @@ router.post(
     // Check Validation of user profile data
     if (!isValid) {
       // Return any 400 errors
-      console.log("here?");
       return res.status(400).json(errors);
     }
 
@@ -211,7 +205,6 @@ router.post(
         current: req.body.current,
         description: req.body.description
       };
-      console.log("did we get to find one?");
       // Add to experience array
       profile.experience.unshift(newExp);
       profile.save().then(profile => {
@@ -255,5 +248,76 @@ router.post(
     });
   }
 );
+
+// @route   DELETE api/profile/experience/:exp_id
+// @desc    Delete experience from profile
+// @access  Private route
+router.delete(
+  "/experience/:exp_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index from user id in db
+        const removeIndex = profile.experience
+          .map(item => item.id)
+          .indexOf(req.params.exp_id);
+
+        if (removeIndex == -1) {
+          errors.experience = " Incorrect Experience ID, nothign to delete";
+          return res.status(404).json(errors);
+        }
+        // Splice out of array
+        profile.experience.splice(removeIndex, 1);
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELETE api/profile/experience/:edu_id
+// @desc    Delete education from profile
+// @access  Private route
+router.delete(
+  "/education/:edu_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const errors = {};
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index from user id in db
+        const removeIndex = profile.education
+          .map(item => item.id)
+          .indexOf(req.params.edu_id);
+
+        if (removeIndex == -1) {
+          errors.education = " Incorrect education ID, nothign to delete";
+          return res.status(404).json(errors);
+        }
+
+        // Splice out of array
+        profile.education.splice(removeIndex, 1);
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELETE api/profile/
+// @desc    Delete user and profile
+// @access  Private route
+router.delete(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+      User.findOneAndRemove({ _id: req.user.id }).then(() =>
+        res.json({ success: true })
+      );
+    });
+  }
+);
+
 //Have to export the router for the server.js file to pick it up.
 module.exports = router;
