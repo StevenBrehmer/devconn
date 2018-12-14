@@ -34,6 +34,7 @@ router.get(
           return res.status(404).json(errors);
         }
         res.json(profile);
+        console.log(req.user.name + " viewed their profile");
       })
       .catch(err => res.status(404).json(err));
   }
@@ -51,7 +52,9 @@ router.get("/all", (req, res) => {
         errors.noprofiles = "There are no profiles";
         return res.status(404).json(errors);
       }
+      //console.log(user.name + " Pulled All User Profiles");
       res.json(profiles);
+      //console.log(req.user.name + " Pulled All User Profiles");
     })
     .catch(err =>
       res.status(404).json({ profile: "There is no profile for this user id" })
@@ -70,6 +73,7 @@ router.get("/handle/:handle", (req, res) => {
         errors.noprofile = "There is no profile for this user";
         return res.status(404).json(errors);
       }
+      //console.log(        req.user.name + " Viewed " + req.params.handle + "'s Profile by handle"      );
       res.json(profile);
     })
     .catch(err => res.status(404).json(err));
@@ -88,6 +92,9 @@ router.get("/user/:user_id", (req, res) => {
         return res.status(404).json(errors);
       }
       res.json(profile);
+      /*console.log(
+        req.user.name + " Viewed " + req.params.handle + "'s Profile by userId"
+      );*/
     })
     .catch(err =>
       res.status(404).json({ profile: "There is no profile for this user id" })
@@ -174,6 +181,7 @@ router.post(
 
           //Save Profile
           new Profile(profileFields).save().then(profile => res.json(profile));
+          //console.log(req.user.name + " Created/Updated Their Profile");
         });
       }
     });
@@ -210,6 +218,7 @@ router.post(
       profile.save().then(profile => {
         res.json(profile);
       });
+      // console.log(req.user.name + " Added Experience to their Profile");
     });
   }
 );
@@ -240,11 +249,12 @@ router.post(
         description: req.body.description
       };
 
-      // Add to experience array
+      // Add to education array
       profile.education.unshift(newEdu);
       profile.save().then(profile => {
         res.json(profile);
       });
+      //console.log(req.user.name + " Added education to their Profile");
     });
   }
 );
@@ -271,6 +281,7 @@ router.delete(
         // Splice out of array
         profile.experience.splice(removeIndex, 1);
         profile.save().then(profile => res.json(profile));
+        //console.log(req.user.name + " Deleted Experience from their Profile");
       })
       .catch(err => res.status(404).json(err));
   }
@@ -299,6 +310,7 @@ router.delete(
         // Splice out of array
         profile.education.splice(removeIndex, 1);
         profile.save().then(profile => res.json(profile));
+        //console.log(req.user.name + " Deleted education from their Profile");
       })
       .catch(err => res.status(404).json(err));
   }

@@ -99,6 +99,7 @@ router.post("/login", (req, res) => {
                 success: true,
                 token: "Bearer " + token
               });
+              console.log(user.name + " Logged in");
             }
           ); // about an hour
         } else {
@@ -122,6 +123,7 @@ router.get(
       name: req.user.name,
       email: req.user.email
     });
+    console.log(req.user.name + " Pulled Current User Data");
   }
 );
 
