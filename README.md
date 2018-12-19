@@ -18,11 +18,11 @@ secretOrKey: "secretKeyForHashing" // just a string of whatever
 Once that is set
 
 <code>
-npm install
+npm install<br>
 </code>
 <code>
-npm run client-install
+npm run client-install<br>
 </code>
 <code>
-npm run dev
+npm run dev <br>
 </code>
