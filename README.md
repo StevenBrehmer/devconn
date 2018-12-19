@@ -19,6 +19,10 @@ Once that is set
 
 <code>
 npm install
+</code>
+<code>
 npm run client-install
+</code>
+<code>
 npm run dev
-</cdde>
+</code>
