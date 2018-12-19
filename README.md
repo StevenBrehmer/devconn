@@ -9,8 +9,16 @@ https://www.udemy.com/mern-stack-front-to-back/learn/v4/content
 
 will need to create
 /config/keys.js
-  
+
 module.exports = {
-mongoURI: "dblink",
-secretOrKey: "secretString"
+mongoURI: "mongodb://user:pass@link:port/dbname",
+secretOrKey: "secretKeyForHashing" // just a string of whatever
 };
+
+Once that is set
+
+<code>
+npm install
+npm run client-install
+npm run dev
+</cdde>
