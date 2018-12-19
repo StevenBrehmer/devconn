@@ -16,15 +16,3 @@ secretOrKey: "secretKeyForHashing" // just a string of whatever
 };
 
 Once that is set
-
-<code>
-npm install<br> \n
-</code>
-
-<code>
-npm run client-install<br>
-</code>
-
-<code>
-npm run dev <br>
-</code>
