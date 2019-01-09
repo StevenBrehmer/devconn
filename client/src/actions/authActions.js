@@ -6,7 +6,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   // This should be inside an asyc call.
-  // thus we nee dto use thunk
+  // thus we need to use thunk
   axios
     .post("/api/users/register", userData)
     .then(res => history.push("/login"))
@@ -50,4 +50,14 @@ export const setCurrentUser = decoded => {
     type: SET_CURRENT_USER,
     payload: decoded
   };
+};
+
+// Log User Out
+export const logoutUser = () => dispatch => {
+  // remove token from local storage
+  localStorage.removeItem("jwtToken");
+  // remove auth header for future requests
+  setAuthToken(false);
+  // Set Current User to {} which will set isAuthenticated to false
+  dispatch(setCurrentUser({}));
 };
