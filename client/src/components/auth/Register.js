@@ -17,6 +17,13 @@ class Register extends Component {
     };
   }
 
+  //add another life cycle component
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     // Here we can test for new properties
     // Test for Errors properties
